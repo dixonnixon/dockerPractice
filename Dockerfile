@@ -1,6 +1,8 @@
 FROM php:7.4-fpm
 
 
+# RUN echo $DBNAME
+
 RUN apt-get update -y
 RUN apt-get -y install gcc make autoconf libc-dev pkg-config libzip-dev
 
@@ -9,6 +11,13 @@ ARG user
 ARG uid
 ARG githubuser
 ARG githubrepo
+ARG DBNAME
+ARG DBHOST
+ARG DBNAME
+ARG UNAME
+ARG PW
+ARG PORT
+
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -67,6 +76,37 @@ RUN chmod 777 -R /var/www/html/vendor/bin/
 RUN chown -R $user ~/.composer/
 RUN chown -R $user /var/www/html/vendor/composer/
 
+RUN ln -sf /bin/bash /bin/sh
+
+RUN mkdir -p /home/.local/bin
+
+COPY bootstrap.sh /home/.local/bin/bootstrap.sh
+
+RUN chown -R $user /home/.local/bin/
+RUN chmod 777 -R /home/.local/bin/
+RUN chmod +x /home/.local/bin/bootstrap.sh
+RUN chown $user /home/.local/bin/bootstrap.sh
+USER $user
+
+WORKDIR /home/.local/bin
+
+ENV DBNAME=$DBNAME
+
+
+ADD . $DBNAME
+ADD . $DBHOST
+ADD . $UNAME
+ADD . $PW
+ADD . $PORT
+
+# RUN echo "$DBNAME" > dbname.txt
+
+RUN ./bootstrap.sh > /home/.local/bin/IConnectInfo.php
+# RUN echo ${DBNAME} > /home/.local/bin/boottext
+
+
+
+
 
 # USER docker
 # CMD /bin/bash
@@ -75,7 +115,8 @@ RUN chown -R $user /var/www/html/vendor/composer/
 # Set working directory
 WORKDIR /var/www/html/domainModel
 
-RUN ln -sf /bin/bash /bin/sh
+
+
 
 USER $user
 

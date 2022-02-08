@@ -15,6 +15,11 @@ services:
         uid: 1000
         githubuser: dixonnixon
         githubrepo: FawlersDomainModel
+        DBNAME: ${DB_NM}
+        DBHOST: ${DB_HOST}
+        UNAME:  ${DB_USR}
+        PW:     ${DB_PW}
+        PORT:   ${DB_PORT}
       context: .
       dockerfile: Dockerfile
     image: app
@@ -27,6 +32,7 @@ services:
       SERVICE_TAGS: dev
       HOST_IP: ${HOST_IP}
       DBNAME: ${DB_NM}
+      DBHOST: ${DB_HOST}
       PW: ${DB_PW}
       UNAME: ${DB_USR}
       PORT: ${DB_PORT}
