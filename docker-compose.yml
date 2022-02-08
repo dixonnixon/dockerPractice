@@ -1,0 +1,78 @@
+version: "3.8"
+
+# x-services-volume:
+#   &services-volume
+#   type: bind
+#   source: 
+#   target: 
+
+services:
+
+  app:
+    build:
+      args:
+        user: admin
+        uid: 1000
+        githubuser: dixonnixon
+        githubrepo: FawlersDomainModel
+      context: .
+      dockerfile: Dockerfile
+    image: app
+    tty: true
+    container_name: app-test
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      HOST_IP: ${HOST_IP}
+      DBNAME: ${DB_NM}
+      PW: ${DB_PW}
+      UNAME: ${DB_USR}
+      PORT: ${DB_PORT}
+    volumes:
+      - ./app:/var/www/html/domainModel:rw
+      - ./docker-compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./backend/composer.json:/var/www/html/composer.json
+    networks:
+      - app-network
+    links:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: app-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/var/www/html/domainModel
+      - ./docker-compose/nginx/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+    links:
+      - app
+
+  db:
+    container_name: app-db
+    image: mysql
+    restart: unless-stopped
+    environment:
+        MYSQL_DATABASE: ${DB_NM}
+        MYSQL_ROOT_PASSWORD: ${DB_PW}
+        MYSQL_PASSWORD: ${DB_PW}
+        MYSQL_USER: ${DB_USR}
+        SERVICE_TAGS: dev
+        SERVICE_NAME: mysql
+    ports:
+        - "9906:3306"
+    volumes:
+      - ./docker-compose/mysql/entry_point:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

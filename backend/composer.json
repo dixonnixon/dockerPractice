@@ -1,0 +1,21 @@
+{
+    "author": "",
+    "name": "root/html",
+    "autoload": {
+        "psr-4": {
+            "DomainModel\\": "domainModel/src/",
+            "Portal\\": "domainModel/src/Portal",
+            "sys\\": "domainModel/src/sys"
+        }
+    },
+    "authors": [
+        {
+            "name": "dd dd",
+            "email": "dd@dd.dd"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "moneyphp/money": "^3.3"
+    }
+}
