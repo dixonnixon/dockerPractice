@@ -70,7 +70,7 @@ RUN chown -R $user /var/www/html/vendor/composer/
 
 # USER docker
 # CMD /bin/bash
-
+# TESTCHANGED
 
 # Set working directory
 WORKDIR /var/www/html/domainModel
