@@ -5,7 +5,8 @@
         "psr-4": {
             "DomainModel\\": "domainModel/src/",
             "Portal\\": "domainModel/src/Portal",
-            "sys\\": "domainModel/src/sys"
+            "sys\\": "domainModel/src/sys",
+            "auth\\": "domainModel/src/auth"
         }
     },
     "authors": [

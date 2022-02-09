@@ -13,7 +13,6 @@ ARG githubuser
 ARG githubrepo
 ARG DBNAME
 ARG DBHOST
-ARG DBNAME
 ARG UNAME
 ARG PW
 ARG PORT
@@ -91,7 +90,6 @@ USER $user
 WORKDIR /home/.local/bin
 
 ENV DBNAME=$DBNAME
-
 
 ADD . $DBNAME
 ADD . $DBHOST
